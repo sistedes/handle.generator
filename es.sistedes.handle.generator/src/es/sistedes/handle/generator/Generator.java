@@ -13,19 +13,8 @@ package es.sistedes.handle.generator;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintWriter;
+import java.io.FileOutputStream;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathConstants;
-import javax.xml.xpath.XPathFactory;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -34,13 +23,10 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.lang3.text.StrSubstitutor;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import org.apache.commons.io.IOUtils;
 
 public class Generator {
-	
+
 	private static final String PREFIX = "p";
 	private static final String PREFIX_LONG = "prefix";
 	private static final String INPUT = "i";
@@ -52,84 +38,68 @@ public class Generator {
 	private static final String ADD_DELETE = "d";
 	private static final String ADD_DELETE_LONG = "add-delete";
 
-	private static Map<String, String> vars = new HashMap<String, String>();
-
 	private static final Options options = new Options();
-	private static final Properties commands = new Properties();
 
 	static {
 		configureOptions(options);
-		configureCommands(commands);
 	}
-	
+
 	public static void main(String[] args) {
 		try {
-			final CommandLineParser parser = new DefaultParser();
-			CommandLine commandLine = null;
-			boolean useGuid = false;
-			boolean addDelete = false;
-			InputStream input = System.in;
-			PrintWriter output = new PrintWriter(System.out);
-			
-			try {
-				commandLine = parser.parse(options, args);
-
-				useGuid = commandLine.hasOption(USE_GUID);
-				addDelete = commandLine.hasOption(ADD_DELETE);
-				input = System.in;
-				output = new PrintWriter(System.out);
-
-				vars.put(Variables.prefix.toString(), commandLine.getOptionValue(PREFIX));
-				
-				if (commandLine.hasOption(INPUT)) {
-					input = new FileInputStream(new File(commandLine.getOptionValue(INPUT)));
-				}
-				
-				if (commandLine.hasOption(OUTPUT)) {
-					output = new PrintWriter(new File(commandLine.getOptionValue(OUTPUT)));
-				}
-			} catch (ParseException e) {
-				printError(e.getLocalizedMessage());
-				printHelp();
-				System.exit(ReturnCodes.ERROR.getReturnCode());
-			}
-			
-			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-			Document doc = builder.parse(input);
-			
-			XPathFactory factory = XPathFactory.newInstance();
-			XPath xpath = factory.newXPath();
-			
-			NodeList list = (NodeList) xpath.evaluate(
-					"//channel/item[link and guid and postmeta[meta_key/text()='handle']]",
-					doc,
-					XPathConstants.NODESET);
-			for (int i = 0; i < list.getLength(); i++) {
-				Node node = list.item(i);
-				vars.put(Variables.url.toString(), 
-						useGuid ? 
-								xpath.evaluate("guid/text()", node) : 
-								xpath.evaluate("link/text()", node));
-				vars.put(Variables.handle.toString(),
-						xpath.evaluate("postmeta[meta_key/text()='handle']/meta_value/text()", node));
-				
-				if (addDelete) {
-					output.println(StrSubstitutor.replace(commands.get("command.delete"), vars));
-				}
-				output.println(StrSubstitutor.replace(commands.get("command.create"), vars));
-				output.println(StrSubstitutor.replace(commands.get("command.admin"), vars));
-				output.println(StrSubstitutor.replace(commands.get("command.url"), vars));
-				output.println();
-				output.flush();
-			}
-			
+			run(args);
 		} catch (Exception e) {
-			printError(e.getLocalizedMessage());
 			System.exit(ReturnCodes.ERROR.getReturnCode());
 		}
 	}
 
-	
+	/**
+	 * Runs the {@link Generator}
+	 * 
+	 * @param args
+	 * @throws Exception
+	 */
+	private static void run(String[] args) throws Exception {
+		try {
+			CommandLine commandLine = null;
+
+			try {
+				CommandLineParser parser = new DefaultParser();
+				commandLine = parser.parse(options, args);
+			} catch (ParseException e) {
+				printError(e.getLocalizedMessage());
+				printHelp();
+				throw e;
+			}
+
+			Conversor conversor = new Conversor(commandLine.getOptionValue(PREFIX));
+
+			FileInputStream input = null;
+			if (commandLine.hasOption(INPUT)) {
+				input = new FileInputStream(new File(commandLine.getOptionValue(INPUT)));
+			}
+
+			FileOutputStream output = null;
+			if (commandLine.hasOption(OUTPUT)) {
+				output = new FileOutputStream(new File(commandLine.getOptionValue(OUTPUT)));
+			}
+
+			conversor.changeOutput(output);
+			conversor.changeInput(input);
+			conversor.putOption(ConversorOptions.USE_GUID, commandLine.hasOption(USE_GUID));
+			conversor.putOption(ConversorOptions.ADD_DELETE, commandLine.hasOption(ADD_DELETE));
+
+			try {
+				conversor.generate();
+			} finally {
+				IOUtils.closeQuietly(input);
+				IOUtils.closeQuietly(output);
+			}
+		} catch (ConversorException e) {
+			printError(e.getLocalizedMessage());
+			throw e;
+		}
+	}
+
 	/**
 	 * Prints the help about the command-line options
 	 */
@@ -157,62 +127,28 @@ public class Generator {
 	 */
 
 	private static void configureOptions(Options options) {
-		Option prefixOpt = Option
-				.builder(PREFIX)
-				.longOpt(PREFIX_LONG)
-				.argName("prefix")
-				.desc("Handle server's prefix (mandatory)")
-				.numberOfArgs(1)
-				.required()
-				.build();
-		
-		Option inputOpt = Option
-				.builder(INPUT)
-				.longOpt(INPUT_LONG)
-				.argName("input file")
-				.desc("The input file (optional, stdin will be used if no input file is specified)")
-				.numberOfArgs(1)
+		Option prefixOpt = Option.builder(PREFIX).longOpt(PREFIX_LONG).argName("prefix")
+				.desc("Handle server's prefix (mandatory)").numberOfArgs(1).required().build();
+
+		Option inputOpt = Option.builder(INPUT).longOpt(INPUT_LONG).argName("input file")
+				.desc("The input file (optional, stdin will be used if no input file is specified)").numberOfArgs(1)
 				.build();
 
-		Option outputOpt = Option
-				.builder(OUTPUT)
-				.longOpt(OUTPUT_LONG)
-				.argName("output file")
-				.desc("The output file (optional, stdout will be used if no input file is specified)")
-				.numberOfArgs(1)
+		Option outputOpt = Option.builder(OUTPUT).longOpt(OUTPUT_LONG).argName("output file")
+				.desc("The output file (optional, stdout will be used if no input file is specified)").numberOfArgs(1)
 				.build();
 
-		Option guidOpt = Option
-				.builder(USE_GUID)
-				.longOpt(USE_GUID_LONG)
-				.desc("Use the guid tag instead of the link")
+		Option guidOpt = Option.builder(USE_GUID).longOpt(USE_GUID_LONG).desc("Use the guid tag instead of the link")
 				.build();
 
-		Option deleteOpt = Option
-				.builder(ADD_DELETE)
-				.longOpt(ADD_DELETE_LONG)
-				.desc("Add delete statements before the creation")
-				.build();
-		
+		Option deleteOpt = Option.builder(ADD_DELETE).longOpt(ADD_DELETE_LONG)
+				.desc("Add delete statements before the creation").build();
+
 		options.addOption(prefixOpt);
 		options.addOption(inputOpt);
 		options.addOption(outputOpt);
 		options.addOption(guidOpt);
 		options.addOption(deleteOpt);
-	}
-
-	/**
-	 * Loads the properties file containing the command strings
-	 * 
-	 * @param commands
-	 *            The {@link Properties} containing the commands
-	 */
-	private static void configureCommands(Properties commands) {
-		try {
-			commands.load(Generator.class.getResourceAsStream("commands.properties"));
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 	/**
