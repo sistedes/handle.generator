@@ -10,18 +10,23 @@
 *******************************************************************************/
 package es.sistedes.handle.generator;
 
+/**
+ * Return codes, used to specify abnormal program terminations
+ * 
+ * @author agomez
+ *
+ */
 public enum ReturnCodes {
-	
-    OK(0),
-    ERROR(1);
 
-    private int returnCode;
+	OK(0), ERROR(1);
 
-    private ReturnCodes(int returnCode) {
-        this.returnCode = returnCode;
-    }
+	private int returnCode;
 
-    public int getReturnCode() {
-        return returnCode;
-    }
+	private ReturnCodes(int returnCode) {
+		this.returnCode = returnCode;
+	}
+
+	public int getReturnCode() {
+		return returnCode;
+	}
 }

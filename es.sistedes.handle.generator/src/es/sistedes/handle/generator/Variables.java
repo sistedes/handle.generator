@@ -11,10 +11,15 @@
 
 package es.sistedes.handle.generator;
 
+/**
+ * Variables that can be used in the property file containing the handle
+ * commands
+ * 
+ * @author agomez
+ *
+ */
 public enum Variables {
 
-	prefix,
-	url,
-	handle
-	
+	prefix, url, handle
+
 }
