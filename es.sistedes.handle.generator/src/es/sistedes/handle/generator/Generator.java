@@ -94,7 +94,7 @@ public class Generator {
 				IOUtils.closeQuietly(input);
 				IOUtils.closeQuietly(output);
 			}
-		} catch (ConversorException e) {
+		} catch (ConversionException e) {
 			printError(e.getLocalizedMessage());
 			throw e;
 		}

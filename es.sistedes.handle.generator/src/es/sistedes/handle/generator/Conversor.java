@@ -99,12 +99,12 @@ public class Conversor {
 	 * {@link InputStream} and dumps the result in the <code>output</code>
 	 * {@link OutputStream}
 	 * 
-	 * @throws ConversorException
+	 * @throws ConversionException
 	 *             If any error occurs, check
-	 *             {@link ConversorException#getCause()} to figure out the exact
+	 *             {@link ConversionException#getCause()} to figure out the exact
 	 *             cause
 	 */
-	public synchronized void generate()	throws ConversorException {
+	public synchronized void generate()	throws ConversionException {
 		
 		PrintWriter outputWriter = new PrintWriter(output);
 		
@@ -144,7 +144,7 @@ public class Conversor {
 				outputWriter.println();
 			}
 		} catch (Exception e) {
-			throw new ConversorException(e);
+			throw new ConversionException(e);
 		} finally {
 			outputWriter.flush();
 		}

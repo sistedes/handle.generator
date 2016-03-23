@@ -5,7 +5,7 @@ package es.sistedes.handle.generator;
  *
  * @author agomez
  */
-public class ConversorException extends Exception {
+public class ConversionException extends Exception {
 
 	static final long serialVersionUID = 1L;
 
@@ -13,7 +13,7 @@ public class ConversorException extends Exception {
 	 * Constructs a {@code ConversorException} with {@code null} as its error
 	 * detail message.
 	 */
-	public ConversorException() {
+	public ConversionException() {
 		super();
 	}
 
@@ -25,7 +25,7 @@ public class ConversorException extends Exception {
 	 *            The detail message (which is saved for later retrieval by the
 	 *            {@link #getMessage()} method)
 	 */
-	public ConversorException(String message) {
+	public ConversionException(String message) {
 		super(message);
 	}
 
@@ -47,7 +47,7 @@ public class ConversorException extends Exception {
 	 *            indicates that the cause is nonexistent or unknown.)
 	 *
 	 */
-	public ConversorException(String message, Throwable cause) {
+	public ConversionException(String message, Throwable cause) {
 		super(message, cause);
 	}
 
@@ -62,7 +62,7 @@ public class ConversorException extends Exception {
 	 *            indicates that the cause is nonexistent or unknown.)
 	 *
 	 */
-	public ConversorException(Throwable cause) {
+	public ConversionException(Throwable cause) {
 		super(cause);
 	}
 }
