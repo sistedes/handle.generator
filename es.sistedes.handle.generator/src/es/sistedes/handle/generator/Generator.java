@@ -66,25 +66,31 @@ public class Generator {
 		try {
 			final CommandLineParser parser = new DefaultParser();
 			CommandLine commandLine = null;
-			
-			try {
-				commandLine = parser.parse(options, args);
-			} catch (ParseException e) {
-				printError(e.getLocalizedMessage());
-				printHelp();
-			}
-			
-			final boolean useGuid = commandLine.hasOption(USE_GUID);
-			final boolean addDelete = commandLine.hasOption(ADD_DELETE);
+			boolean useGuid = false;
+			boolean addDelete = false;
 			InputStream input = System.in;
 			PrintWriter output = new PrintWriter(System.out);
 			
-			if (commandLine.hasOption(INPUT)) {
-				input = new FileInputStream(new File(commandLine.getOptionValue(INPUT)));
-			}
-			
-			if (commandLine.hasOption(OUTPUT)) {
-				output = new PrintWriter(new File(commandLine.getOptionValue(OUTPUT)));
+			try {
+				commandLine = parser.parse(options, args);
+
+				useGuid = commandLine.hasOption(USE_GUID);
+				addDelete = commandLine.hasOption(ADD_DELETE);
+				input = System.in;
+				output = new PrintWriter(System.out);
+
+				vars.put(Variables.prefix.toString(), commandLine.getOptionValue(PREFIX));
+				
+				if (commandLine.hasOption(INPUT)) {
+					input = new FileInputStream(new File(commandLine.getOptionValue(INPUT)));
+				}
+				
+				if (commandLine.hasOption(OUTPUT)) {
+					output = new PrintWriter(new File(commandLine.getOptionValue(OUTPUT)));
+				}
+			} catch (ParseException e) {
+				printError(e.getLocalizedMessage());
+				printHelp();
 			}
 			
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
@@ -105,8 +111,6 @@ public class Generator {
 								xpath.evaluate("link/text()", node));
 				vars.put(Variables.handle.toString(),
 						xpath.evaluate("postmeta[meta_key/text()='handle']/meta_value/text()", node));
-				vars.put(Variables.prefix.toString(),
-						commandLine.getOptionValue(PREFIX));
 				
 				if (addDelete) {
 					output.println(StrSubstitutor.replace(commands.get("command.delete"), vars));
@@ -124,16 +128,32 @@ public class Generator {
 		}
 	}
 
-
+	
+	/**
+	 * Prints the help about the command-line options
+	 */
 	private static void printHelp() {
 		HelpFormatter formatter = new HelpFormatter();
 		formatter.setOptionComparator(new OptionComarator<>());
 		formatter.printHelp("java -jar <this-file.jar>", options, true);
 	}
 
+	/**
+	 * Prints the <code>message</code> {@link String} in the standard error
+	 * 
+	 * @param message
+	 *            The message
+	 */
 	private static void printError(String message) {
 		System.err.println(message);
 	}
+
+	/**
+	 * Configures the command-line {@link Options}
+	 * 
+	 * @param options
+	 *            The {@link Options}
+	 */
 
 	private static void configureOptions(Options options) {
 		Option prefixOpt = Option
@@ -180,7 +200,13 @@ public class Generator {
 		options.addOption(deleteOpt);
 	}
 
-	private static void configureCommands(Properties commands2) {
+	/**
+	 * Loads the properties file containing the command strings
+	 * 
+	 * @param commands
+	 *            The {@link Properties} containing the commands
+	 */
+	private static void configureCommands(Properties commands) {
 		try {
 			commands.load(Generator.class.getResourceAsStream("commands.properties"));
 		} catch (IOException e) {
@@ -188,6 +214,13 @@ public class Generator {
 		}
 	}
 
+	/**
+	 * Comparator to always give the command line options in the same order
+	 * 
+	 * @author agomez
+	 *
+	 * @param <T>
+	 */
 	private static class OptionComarator<T extends Option> implements Comparator<T> {
 		private static final String OPTS_ORDER = "piogdq";
 
@@ -196,5 +229,5 @@ public class Generator {
 			return OPTS_ORDER.indexOf(o1.getOpt()) - OPTS_ORDER.indexOf(o2.getOpt());
 		}
 	}
-	
+
 }
