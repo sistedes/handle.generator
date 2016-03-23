@@ -187,7 +187,7 @@ public class Conversor {
 	 */
 	private static void configureCommands(Properties commands) {
 		try {
-			commands.load(Generator.class.getResourceAsStream("commands.properties"));
+			commands.load(CliLauncher.class.getResourceAsStream("commands.properties"));
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

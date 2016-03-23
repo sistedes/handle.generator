@@ -25,7 +25,7 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
 
-public class Generator {
+public class CliLauncher {
 
 	private static final String PREFIX = "p";
 	private static final String PREFIX_LONG = "prefix";
@@ -53,7 +53,7 @@ public class Generator {
 	}
 
 	/**
-	 * Runs the {@link Generator}
+	 * Runs the {@link CliLauncher}
 	 * 
 	 * @param args
 	 * @throws Exception
@@ -76,15 +76,15 @@ public class Generator {
 			FileInputStream input = null;
 			if (commandLine.hasOption(INPUT)) {
 				input = new FileInputStream(new File(commandLine.getOptionValue(INPUT)));
+				conversor.changeInput(input);
 			}
 
 			FileOutputStream output = null;
 			if (commandLine.hasOption(OUTPUT)) {
 				output = new FileOutputStream(new File(commandLine.getOptionValue(OUTPUT)));
+				conversor.changeOutput(output);
 			}
 
-			conversor.changeOutput(output);
-			conversor.changeInput(input);
 			conversor.putOption(ConversorOptions.USE_GUID, commandLine.hasOption(USE_GUID));
 			conversor.putOption(ConversorOptions.ADD_DELETE, commandLine.hasOption(ADD_DELETE));
 
