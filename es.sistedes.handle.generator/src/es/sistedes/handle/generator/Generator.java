@@ -52,7 +52,7 @@ public class Generator {
 	private static final String ADD_DELETE = "d";
 	private static final String ADD_DELETE_LONG = "add-delete";
 
-	private static Map<String, String> vars = new HashMap<>();
+	private static Map<String, String> vars = new HashMap<String, String>();
 
 	private static final Options options = new Options();
 	private static final Properties commands = new Properties();
@@ -134,7 +134,7 @@ public class Generator {
 	 */
 	private static void printHelp() {
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.setOptionComparator(new OptionComarator<>());
+		formatter.setOptionComparator(new OptionComarator<Option>());
 		formatter.printHelp("java -jar <this-file.jar>", options, true);
 	}
 
