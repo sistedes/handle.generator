@@ -124,15 +124,15 @@ public class Conversor {
 			Boolean addDelete = addDelete();
 	
 			Map<String, String> vars = new HashMap<String, String>();
-			vars.put(Variables.prefix.toString(), prefix);
+			vars.put(HandleVariables.prefix.toString(), prefix);
 	
 			for (int i = 0; i < list.getLength(); i++) {
 				Node node = list.item(i);
-				vars.put(Variables.url.toString(), 
+				vars.put(HandleVariables.url.toString(), 
 						useGuid ? 
 								xpath.evaluate("guid/text()", node) : 
 								xpath.evaluate("link/text()", node));
-				vars.put(Variables.handle.toString(),
+				vars.put(HandleVariables.handle.toString(),
 						xpath.evaluate("postmeta[meta_key/text()='handle']/meta_value/text()", node));
 				
 				if (addDelete) {

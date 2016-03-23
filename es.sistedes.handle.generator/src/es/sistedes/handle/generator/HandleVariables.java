@@ -18,7 +18,7 @@ package es.sistedes.handle.generator;
  * @author agomez
  *
  */
-public enum Variables {
+public enum HandleVariables {
 
 	prefix, url, handle
 
