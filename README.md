@@ -10,7 +10,7 @@ Generates a list of handle value lines to register the handles for the wordpress
 
 Find the releases at https://github.com/abelgomez/sistedes.biblioteca/releases
 
-to run the tool, you only need to download the file `generator.jar`. 
+To run the tool, only the `generator.jar` file is needed. 
 
 ### Command line options:
 
