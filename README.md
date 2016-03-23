@@ -12,3 +12,30 @@ usage: java -jar <this-file.jar> -p <prefix> [-i <input file>] [-o <output file>
  -g,--guid                   Use the guid tag instead of the link
  -d,--add-delete             Add delete statements before the creation
 
+## How to use this tool
+
+1. Step 1: Export the wordpress articles using the administrator GUI:
+
+![Exporting articles](doc/export.png)
+
+1. Step 2: Launch the generator:
+
+````
+$ java -jar generator.jar -p 11705 -i export.xml -o result.txt
+
+$ cat result.txt
+CREATE 11705/JISBD/2015/009
+100 HS_ADMIN 86400 1110 ADMIN 300:111111111111:0.NA/11705
+1 URL 86400 1110 UTF8 http://biblioteca.sistedes.es/articulo/un-indice-espacio-temporal-compacto-para-consultas-time-slice-y-time-interval/
+
+```
+
+  It is also possible run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is specially useful when using the tool within shell scripts:
+  
+````
+$ cat export.xml | java -jar generator.jar -p 11705
+CREATE 11705/JISBD/2015/009
+100 HS_ADMIN 86400 1110 ADMIN 300:111111111111:0.NA/11705
+1 URL 86400 1110 UTF8 http://biblioteca.sistedes.es/articulo/un-indice-espacio-temporal-compacto-para-consultas-time-slice-y-time-interval/
+
+```
