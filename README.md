@@ -6,6 +6,12 @@ Tools for the Sistedes digital library.
 
 Generates a list of handle value lines to register the handles for the wordpress entries in the [Sistedes Digital Library](http://biblioteca.sistedes.es).
 
+### Downloads
+
+Find the releases at https://github.com/abelgomez/sistedes.biblioteca/releases
+
+to run the tool, you only need to download the file `generator.jar`. 
+
 ### Command line options:
 
 ```
