@@ -1,4 +1,4 @@
-# Sistedes digital Library Tools
+# Sistedes Digital Library Tools
 
 Tools for the Sistedes digital library.
 
