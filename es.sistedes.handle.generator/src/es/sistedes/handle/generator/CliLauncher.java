@@ -15,6 +15,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -27,6 +29,8 @@ import org.apache.commons.io.IOUtils;
 
 public class CliLauncher {
 
+	private static final Logger LOGGER = Logger.getLogger(CliLauncher.class.getName());
+	
 	private static final String PREFIX = "p";
 	private static final String PREFIX_LONG = "prefix";
 	private static final String INPUT = "i";
@@ -47,7 +51,11 @@ public class CliLauncher {
 	public static void main(String[] args) {
 		try {
 			run(args);
-		} catch (Exception e) {
+		} catch (Throwable t) {
+			if (t instanceof RuntimeException || t instanceof Error) {
+				// Log unexpected unchecked exception
+				LOGGER.log(Level.SEVERE, t.toString(), t);
+			}
 			System.exit(ReturnCodes.ERROR.getReturnCode());
 		}
 	}
