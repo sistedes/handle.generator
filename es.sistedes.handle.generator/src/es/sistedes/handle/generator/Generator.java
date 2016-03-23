@@ -91,6 +91,7 @@ public class Generator {
 			} catch (ParseException e) {
 				printError(e.getLocalizedMessage());
 				printHelp();
+				System.exit(ReturnCodes.ERROR.getReturnCode());
 			}
 			
 			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
