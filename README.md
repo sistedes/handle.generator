@@ -41,7 +41,7 @@ CREATE 11705/JISBD/2015/009
 
 ```
 
-  It is also possible run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is specially useful when using the tool within shell scripts:
+  It is also possible to run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is specially useful when using the tool within shell scripts:
   
 ````
 $ cat export.xml | java -jar generator.jar -p 11705
