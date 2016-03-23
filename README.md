@@ -1,9 +1,12 @@
-# sistedes.biblioteca
+# Sistedes digital Library Tools
+
 Tools for the Sistedes digital library.
+
+## es.sistedes.handle.generator
 
 Generates a list of handle value lines to register the handles for the wordpress entries in the [Sistedes Digital Library](http://biblioteca.sistedes.es).
 
-## Command line options:
+### Command line options:
 
 usage: java -jar <this-file.jar> -p <prefix> [-i <input file>] [-o <output file>] [-g] [-d]
  -p,--prefix <prefix>        Handle server's prefix (mandatory)
@@ -12,7 +15,7 @@ usage: java -jar <this-file.jar> -p <prefix> [-i <input file>] [-o <output file>
  -g,--guid                   Use the guid tag instead of the link
  -d,--add-delete             Add delete statements before the creation
 
-## How to use this tool
+### How to use this tool
 
 1. Step 1: Export the wordpress articles using the administrator GUI:
 
