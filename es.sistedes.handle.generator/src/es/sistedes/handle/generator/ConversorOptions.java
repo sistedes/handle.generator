@@ -11,10 +11,18 @@
 
 package es.sistedes.handle.generator;
 
+/**
+ * Options controlling the conversion process
+ * 
+ * @author agomez
+ *
+ */
 public enum ConversorOptions {
 
+	// @formatter:off
 	USE_GUID,
 	ADD_DELETE,
 	FILTER
-	
+	// @formatter:on
+
 }

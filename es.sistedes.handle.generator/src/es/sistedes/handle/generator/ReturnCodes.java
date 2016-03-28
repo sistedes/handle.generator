@@ -18,7 +18,10 @@ package es.sistedes.handle.generator;
  */
 public enum ReturnCodes {
 
-	OK(0), ERROR(1);
+	// @formatter:off
+	OK(0),
+	ERROR(1);
+	// @formatter:on
 
 	private int returnCode;
 

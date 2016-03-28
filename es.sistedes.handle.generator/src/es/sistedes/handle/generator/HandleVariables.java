@@ -20,6 +20,10 @@ package es.sistedes.handle.generator;
  */
 public enum HandleVariables {
 
-	prefix, url, handle
+	// @formatter:off
+	prefix, 
+	url, 
+	handle
+	// @formatter:on
 
 }

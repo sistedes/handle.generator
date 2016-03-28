@@ -28,10 +28,16 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.io.IOUtils;
 
+/**
+ * CLI invocator
+ * 
+ * @author agomez
+ *
+ */
 public class CliLauncher {
 
 	private static final Logger LOGGER = Logger.getLogger(CliLauncher.class.getName());
-	
+
 	private static final String PREFIX = "p";
 	private static final String PREFIX_LONG = "prefix";
 	private static final String INPUT = "i";
@@ -44,7 +50,7 @@ public class CliLauncher {
 	private static final String ADD_DELETE_LONG = "add-delete";
 	private static final String FILTER = "f";
 	private static final String FILTER_LONG = "filter";
-	
+
 	private static final Options options = new Options();
 
 	static {
