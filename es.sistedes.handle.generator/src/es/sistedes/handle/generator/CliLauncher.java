@@ -141,27 +141,53 @@ public class CliLauncher {
 	 */
 
 	private static void configureOptions(Options options) {
-		Option prefixOpt = Option.builder(PREFIX).longOpt(PREFIX_LONG).argName("prefix")
-				.desc("Handle server's prefix (mandatory)").numberOfArgs(1).required().build();
-
-		Option inputOpt = Option.builder(INPUT).longOpt(INPUT_LONG).argName("input file")
-				.desc("The input file (optional, stdin will be used if no input file is specified)").numberOfArgs(1)
+		// @formatter:off
+		Option prefixOpt = Option
+				.builder(PREFIX)
+				.longOpt(PREFIX_LONG)
+				.argName("prefix")
+				.desc("Handle server's prefix (mandatory)")
+				.numberOfArgs(1)
+				.required()
 				.build();
 
-		Option outputOpt = Option.builder(OUTPUT).longOpt(OUTPUT_LONG).argName("output file")
-				.desc("The output file (optional, stdout will be used if no input file is specified)").numberOfArgs(1)
+		Option inputOpt = Option
+				.builder(INPUT)
+				.longOpt(INPUT_LONG)
+				.argName("input file")
+				.desc("The input file (optional, stdin will be used if no input file is specified)")
+				.numberOfArgs(1)
 				.build();
 
-		Option guidOpt = Option.builder(USE_GUID).longOpt(USE_GUID_LONG).desc("Use the guid tag instead of the link")
+		Option outputOpt = Option
+				.builder(OUTPUT)
+				.longOpt(OUTPUT_LONG)
+				.argName("output file")
+				.desc("The output file (optional, stdout will be used if no input file is specified)")
+				.numberOfArgs(1)
 				.build();
 
-		Option deleteOpt = Option.builder(ADD_DELETE).longOpt(ADD_DELETE_LONG)
-				.desc("Add delete statements before the creation").build();
-
-		Option filterOpt = Option.builder(FILTER).longOpt(FILTER_LONG).argName("filter")
-				.desc("Regular expression that the handles of the elements to be transformed must match").numberOfArgs(1)
+		Option guidOpt = Option
+				.builder(USE_GUID)
+				.longOpt(USE_GUID_LONG)
+				.desc("Use the guid tag instead of the link")
 				.build();
-		
+
+		Option deleteOpt = Option
+				.builder(ADD_DELETE)
+				.longOpt(ADD_DELETE_LONG)
+				.desc("Add delete statements before the creation")
+				.build();
+
+		Option filterOpt = Option
+				.builder(FILTER)
+				.longOpt(FILTER_LONG)
+				.argName("filter")
+				.desc("Regular expression that the handles of the elements to be transformed must match")
+				.numberOfArgs(1)
+				.build();
+		// @formatter:on
+
 		options.addOption(prefixOpt);
 		options.addOption(inputOpt);
 		options.addOption(outputOpt);
