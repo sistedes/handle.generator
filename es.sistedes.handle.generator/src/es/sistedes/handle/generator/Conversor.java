@@ -18,6 +18,7 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -139,12 +140,21 @@ public class Conversor {
 	
 			for (int i = 0; i < list.getLength(); i++) {
 				Node node = list.item(i);
+				String handle = xpath.evaluate("postmeta[meta_key/text()='handle']/meta_value/text()", node);
+				if (filter() != null) {
+					// We use a regex in the Node instead of a XPath filter in
+					// the NodeList because Java only supports XPath 1 and the
+					// "matches" function has been introduced in XPath 2
+					Pattern pattern = Pattern.compile(filter());
+					if (!pattern.matcher(handle).matches()) {
+						continue;
+					}
+				}
+				vars.put(HandleVariables.handle.toString(), handle);
 				vars.put(HandleVariables.url.toString(), 
 						useGuid ? 
 								xpath.evaluate("guid/text()", node) : 
 								xpath.evaluate("link/text()", node));
-				vars.put(HandleVariables.handle.toString(),
-						xpath.evaluate("postmeta[meta_key/text()='handle']/meta_value/text()", node));
 				
 				if (addDelete) {
 					outputWriter.println(StrSubstitutor.replace(commands.get("command.delete"), vars));
@@ -177,6 +187,16 @@ public class Conversor {
 	 */
 	private Boolean useGuid() {
 		return (Boolean) (options.get(ConversorOptions.USE_GUID) != null ? options.get(ConversorOptions.USE_GUID) : false);
+	}
+
+	/**
+	 * Returns the {@link ConversorOptions#FILTER} option or <code>null</code>
+	 * if no filter has been specified
+	 * 
+	 * @return The filter or <code>null</code>
+	 */
+	private String filter() {
+		return (String) options.get(ConversorOptions.FILTER);
 	}
 	
 	/**

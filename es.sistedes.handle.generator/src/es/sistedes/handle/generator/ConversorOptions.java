@@ -14,6 +14,7 @@ package es.sistedes.handle.generator;
 public enum ConversorOptions {
 
 	USE_GUID,
-	ADD_DELETE
+	ADD_DELETE,
+	FILTER
 	
 }

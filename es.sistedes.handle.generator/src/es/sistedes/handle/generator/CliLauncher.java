@@ -13,6 +13,7 @@ package es.sistedes.handle.generator;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Comparator;
 import java.util.logging.Level;
@@ -41,7 +42,9 @@ public class CliLauncher {
 	private static final String USE_GUID_LONG = "guid";
 	private static final String ADD_DELETE = "d";
 	private static final String ADD_DELETE_LONG = "add-delete";
-
+	private static final String FILTER = "f";
+	private static final String FILTER_LONG = "filter";
+	
 	private static final Options options = new Options();
 
 	static {
@@ -95,6 +98,9 @@ public class CliLauncher {
 
 			conversor.putOption(ConversorOptions.USE_GUID, commandLine.hasOption(USE_GUID));
 			conversor.putOption(ConversorOptions.ADD_DELETE, commandLine.hasOption(ADD_DELETE));
+			if (commandLine.hasOption(FILTER)) {
+				conversor.putOption(ConversorOptions.FILTER, commandLine.getOptionValue(FILTER));
+			}
 
 			try {
 				conversor.generate();
@@ -102,8 +108,8 @@ public class CliLauncher {
 				IOUtils.closeQuietly(input);
 				IOUtils.closeQuietly(output);
 			}
-		} catch (ConversionException e) {
-			printError(e.getLocalizedMessage());
+		} catch (ConversionException | FileNotFoundException e) {
+			printError("ERROR: " + e.getLocalizedMessage());
 			throw e;
 		}
 	}
@@ -152,11 +158,16 @@ public class CliLauncher {
 		Option deleteOpt = Option.builder(ADD_DELETE).longOpt(ADD_DELETE_LONG)
 				.desc("Add delete statements before the creation").build();
 
+		Option filterOpt = Option.builder(FILTER).longOpt(FILTER_LONG).argName("filter")
+				.desc("Regular expression that the handles of the elements to be transformed must match").numberOfArgs(1)
+				.build();
+		
 		options.addOption(prefixOpt);
 		options.addOption(inputOpt);
 		options.addOption(outputOpt);
 		options.addOption(guidOpt);
 		options.addOption(deleteOpt);
+		options.addOption(filterOpt);
 	}
 
 	/**
@@ -167,7 +178,7 @@ public class CliLauncher {
 	 * @param <T>
 	 */
 	private static class OptionComarator<T extends Option> implements Comparator<T> {
-		private static final String OPTS_ORDER = "piogdq";
+		private static final String OPTS_ORDER = "piogdf";
 
 		@Override
 		public int compare(T o1, T o2) {
