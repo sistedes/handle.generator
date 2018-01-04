@@ -32,7 +32,7 @@ usage: java -jar <this-file.jar> -p <prefix> [-i <input file>] [-o <output file>
 
 1. Step 2: Launch the generator:
 
-````
+```
 $ java -jar generator.jar -p 11705 -i export.xml -o result.txt
 
 $ cat result.txt
@@ -44,7 +44,7 @@ CREATE 11705/JISBD/2015/009
 
   It is also possible to run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is specially useful when using the tool within shell scripts:
   
-````
+```
 $ cat export.xml | java -jar generator.jar -p 11705
 CREATE 11705/JISBD/2015/009
 100 HS_ADMIN 86400 1110 ADMIN 300:111111111111:0.NA/11705
@@ -54,7 +54,7 @@ CREATE 11705/JISBD/2015/009
 
   An example using the regular expression filters could be:
 
-````
+```
 $ java -jar generator.jar -p 11705 -i export.xml -f this-filter-does-not-match-anything
 
 $ java -jar generator.jar -p 11705 -i export.xml -f 11705/JISBD/.*
