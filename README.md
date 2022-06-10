@@ -1,14 +1,14 @@
-# Sistedes Digital Library Tools
+# SISTEDES Digital Library Tools
 
 Tools for the Sistedes digital library.
 
 ## es.sistedes.handle.generator
 
-Generates a list of handle value lines to register the handles for the wordpress entries in the [Sistedes Digital Library](http://biblioteca.sistedes.es).
+Generates a list of handle value lines to register the handles for the wordpress entries in the [SISTEDES Digital Library](http://biblioteca.sistedes.es).
 
 ### Downloads
 
-Find the releases at https://github.com/abelgomez/sistedes.biblioteca/releases
+Find the releases at https://github.com/sistedes/handle.generator/releases
 
 To run the tool, only the `generator.jar` file is needed. 
 
