@@ -1,6 +1,6 @@
-# Hendle generator tool for the SISTEDES Digital Library
+# Handle generator tool for the SISTEDES Digital Library
 
-Hendle generator tool for the SISTEDES Digital Library.
+Handle generator tool for the SISTEDES Digital Library.
 
 ## es.sistedes.handle.generator
 
