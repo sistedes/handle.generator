@@ -1,10 +1,10 @@
-# Handle generator tool for the SISTEDES Digital Library
+# Handle generator tool for the Sistedes Digital Library
 
-Handle generator tool for the SISTEDES Digital Library.
+Handle generator tool for the WordPress-based Sistedes Digital Library.
 
 ## es.sistedes.handle.generator
 
-Generates a list of handle value lines to register the handles for the wordpress entries in the [SISTEDES Digital Library](http://biblioteca.sistedes.es).
+Generates a list of handle value lines to register the handles for the WordPress entries in the [Sistedes Digital Library](http://biblioteca.sistedes.es).
 
 ### Downloads
 
@@ -26,7 +26,7 @@ usage: java -jar <this-file.jar> -p <prefix> [-i <input file>] [-o <output file>
 
 ### How to use this tool
 
-1. Step 1: Export the wordpress articles using the administrator GUI:
+1. Step 1: Export the WordPress articles using the administrator GUI:
 
 ![Exporting articles](doc/export.png)
 
@@ -42,7 +42,7 @@ CREATE 11705/JISBD/2015/009
 
 ```
 
-  It is also possible to run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is specially useful when using the tool within shell scripts:
+  It is also possible to run the command without the `-i` and `-o` arguments, and stdin and stdout will be used instead. This feature is especially useful when using the tool within shell scripts:
   
 ```
 $ cat export.xml | java -jar generator.jar -p 11705
