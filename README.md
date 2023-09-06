@@ -1,3 +1,6 @@
+:warning: | **This tool is no longer needed, since the migration of the Sistedes Digital Library from Wordpress to DSpace took place in Sept. 2023** | :warning:
+----------|-------------------------------------------------------------------------------------------------------------------------------|----------
+
 # Handle generator tool for the Sistedes Digital Library
 
 Handle generator tool for the WordPress-based Sistedes Digital Library.
